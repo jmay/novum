@@ -3,13 +3,8 @@ class ProfilesController < ApplicationController
 
   # GET /profiles
   def index
-    profiles = Profile.all.each_with_object({}) do |p, h|
-      h[p] = "/profiles/#{p}"
-      # handle = p['handle'] || 'missing-handle'
-      # h[handle] = "/profiles/#{handle}"
-    end
-    logger.info "RESPONDING WITH #{profiles.inspect}"
-    respond_with profiles
+    profiles = Profile.all
+    render :json => {:profiles => profiles}
   end
 
   # GET /profiles/XXX

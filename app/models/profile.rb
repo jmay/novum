@@ -19,23 +19,39 @@ class Profile
     @@mongo ||= Mongo::Connection.new
   end
 
+  def self.db
+    @@db ||= mongo["novum_#{Rails.env}"]
+  end
+
   def self.all
-    dbs = mongo.database_names
-    dbs.select {|n| n =~ /^novum:/}.map {|n| n.gsub(/^novum:/, '')}
+    db['profiles'].find().to_a
+    # dbs = mongo.database_names
+    # dbs.select {|n| n =~ /^novum:/}.map {|n| n.gsub(/^novum:/, '')}
   end
 
   def self.[](handle)
-    dbname = "novum:#{handle}"
-    new(mongo[dbname])
+    # dbname = "novum:#{handle}"
+    # new(mongo[dbname])
+    profiles = db['profiles']
+    profiles.find_one("handle" => handle).andand.to_hash
   end
 
-  def initialize(db)
-    @db = db
+  def self.create(hash)
+    profiles = db['profiles']
+    profiles.insert(hash)
+    new(hash)
+  end
+
+  def delete
+    @@db['profiles'].remove(@me)
+  end
+
+  def initialize(me)
+    @me = me
   end
 
   def core
     @core ||= initcore
-
   end
 
   def initcore
@@ -47,7 +63,8 @@ class Profile
   end
 
   def [](key)
-    core.find_one[key]
+    @me[key]
+    # core.find_one[key]
   end
 
   def []=(key, value)

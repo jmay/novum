@@ -5,7 +5,7 @@ describe ProfilesController do
   it "has many" do
     get :index, :format => :json
     data = JSON.parse(response.body)
-    puts data.inspect
+    data['profiles'].should_not be_nil
     data['profiles'].count.should == 0
   end
 
