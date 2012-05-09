@@ -38,16 +38,22 @@ class Profile
 
   def self.create(hash)
     profiles = db['profiles']
-    profiles.insert(hash)
-    new(hash)
+    new_id = profiles.insert(hash)
+    new(new_id)
   end
 
   def delete
-    @@db['profiles'].remove(@me)
+    @@db['profiles'].remove({'_id' => @id})
   end
 
-  def initialize(me)
-    @me = me
+  def update(hash)
+    @@db['profiles'].update({'_id' => @id}, {"$set" => hash})
+    @@db['profiles'].find_one('_id' => @id).andand.to_hash
+    # puts @me.inspect
+  end
+
+  def initialize(thisid)
+    @id = thisid
   end
 
   def core
@@ -63,7 +69,8 @@ class Profile
   end
 
   def [](key)
-    @me[key]
+    data = @@db['profiles'].find_one('_id' => @id).andand.to_hash
+    data[key]
     # core.find_one[key]
   end
 

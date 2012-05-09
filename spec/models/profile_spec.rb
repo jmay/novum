@@ -33,3 +33,25 @@ describe "with a profile" do
     profile['fullname'].should == 'Ralph Malph'
   end
 end
+
+describe "profile changes" do
+  before(:all) do
+    @ralph = Profile.create(:handle => 'ralphie', :fullname => 'Ralph Malph', :email => 'ralph@happydays.com')
+  end
+
+  before(:each) do
+    @ralph.update(:fullname => 'Ralph Q. Malph')
+  end
+
+  after(:all) do
+    @ralph.delete
+  end
+
+  it "should see the changes" do
+    @ralph['fullname'].should == 'Ralph Q. Malph'
+  end
+
+  it "should remember history" do
+    pending
+  end
+end
