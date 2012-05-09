@@ -8,6 +8,7 @@ class ProfilesController < ApplicationController
       # handle = p['handle'] || 'missing-handle'
       # h[handle] = "/profiles/#{handle}"
     end
+    logger.info "RESPONDING WITH #{profiles.inspect}"
     respond_with profiles
   end
 
@@ -15,6 +16,7 @@ class ProfilesController < ApplicationController
   def show
     profile = Profile[params[:id]]
     if profile
+      logger.info "RESPONDING WITH #{profile.stripped.inspect}"
       respond_with profile.stripped
     else
       render :status => 404, :nothing => true

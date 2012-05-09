@@ -138,6 +138,7 @@ DEPENDENCIES
   guard-rspec
   jquery-rails
   mongoid (~> 2.4.9)
+  rack-test
   rails (= 3.2.3)
   rb-fsevent
   rspec-rails

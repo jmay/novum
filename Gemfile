@@ -26,6 +26,9 @@ gem 'jquery-rails'
 
 group :development, :test do
   gem 'rspec-rails' #, '2.6.1'
+  gem "rack-test"
+  # gem 'capybara-json'
+  # gem 'capybara'
 
   gem 'rb-fsevent'
   gem 'ruby_gntp'
