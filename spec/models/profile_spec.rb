@@ -10,16 +10,16 @@ describe "empty database" do
   end
 end
 
-describe "with a profile" do
+describe "newly-created profile" do
   before(:all) do
-    @profile = Profile.create(:handle => 'ralphie', :fullname => 'Ralph Malph', :email => 'ralph@happydays.com')
+    @ralph = Profile.create(:handle => 'ralphie', :fullname => 'Ralph Malph', :email => 'ralph@happydays.com')
   end
 
   after(:all) do
-    @profile.delete
+    @ralph.delete
   end
 
-  it "should now appear in the catalog" do
+  it "should appear in the catalog" do
     profiles = Profile.all
     profiles.count.should == 1
     p = profiles.first
@@ -32,26 +32,31 @@ describe "with a profile" do
     profile['handle'].should == 'ralphie'
     profile['fullname'].should == 'Ralph Malph'
   end
+
+  it "should have minimal change log" do
+    @ralph.changes.count.should == 1
+  end
 end
 
 describe "profile changes" do
   before(:all) do
-    @ralph = Profile.create(:handle => 'ralphie', :fullname => 'Ralph Malph', :email => 'ralph@happydays.com')
+    @potsie = Profile.create(:handle => 'potsie', :fullname => 'Warren Weber', :email => 'potsie@happydays.com')
   end
 
   before(:each) do
-    @ralph.update(:fullname => 'Ralph Q. Malph')
+    @potsie.update(:fullname => 'Warren "Potsie" Weber')
   end
 
   after(:all) do
-    @ralph.delete
+    @potsie.delete
   end
 
   it "should see the changes" do
-    @ralph['fullname'].should == 'Ralph Q. Malph'
+    @potsie['fullname'].should == 'Warren "Potsie" Weber'
   end
 
   it "should remember history" do
-    pending
+    # puts @potsie.changes.to_a.inspect
+    @potsie.changes.count.should == 2
   end
 end

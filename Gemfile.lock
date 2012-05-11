@@ -139,6 +139,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   guard-rspec
   jquery-rails
+  mongo
   mongoid (~> 2.4.9)
   rack-test
   rails (= 3.2.3)

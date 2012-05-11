@@ -7,6 +7,7 @@ gem 'rails', '3.2.3'
 
 # gem 'sqlite3'
 gem 'mongoid', '~> 2.4.9'
+gem 'mongo'
 gem 'bson_ext'
 
 gem 'andand'

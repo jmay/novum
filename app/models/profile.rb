@@ -15,6 +15,8 @@
 
 
 class Profile
+  attr_reader :id
+
   def self.mongo
     @@mongo ||= Mongo::Connection.new
   end
@@ -37,36 +39,47 @@ class Profile
   end
 
   def self.create(hash)
-    profiles = db['profiles']
-    new_id = profiles.insert(hash)
-    new(new_id)
+    p = new
+    p.set_properties(hash)
+    p
+  end
+
+  def set_properties(hash)
+    new_id = Profile.db['profiles'].insert(hash)
+    @id = new_id
+    Changes.new(self, hash)
+    hash
   end
 
   def delete
-    @@db['profiles'].remove({'_id' => @id})
+    @@db['profiles'].remove({'_id' => id})
+    @@db['changes'].remove(:profile => id)
   end
 
   def update(hash)
-    @@db['profiles'].update({'_id' => @id}, {"$set" => hash})
-    @@db['profiles'].find_one('_id' => @id).andand.to_hash
-    # puts @me.inspect
-  end
-
-  def initialize(thisid)
-    @id = thisid
-  end
-
-  def core
-    @core ||= initcore
-  end
-
-  def initcore
-    coll = @db['core']
-    if coll.count == 0
-      coll.insert({})
+    current = @@db['profiles'].find_one('_id' => @id).andand.to_hash
+    updates = hash.select {|k,v| current[k.to_s] != v}
+    if updates.any?
+      @@db['profiles'].update({'_id' => @id}, {"$set" => hash})
+      Changes.new(self, hash)
+      @@db['profiles'].find_one('_id' => @id).andand.to_hash
     end
-    coll
   end
+
+  def initialize
+  end
+
+  # def core
+  #   @core ||= initcore
+  # end
+
+  # def initcore
+  #   coll = @db['core']
+  #   if coll.count == 0
+  #     coll.insert({})
+  #   end
+  #   coll
+  # end
 
   def [](key)
     data = @@db['profiles'].find_one('_id' => @id).andand.to_hash
@@ -75,12 +88,13 @@ class Profile
   end
 
   def []=(key, value)
+    puts "SET #{key} = #{value} for #{id}"
     core.update({}, {'$set' => {key => value}})
   end
 
-  def stripped
-    core.find_one.reject {|k,v| v.nil?}
-  end
+  # def stripped
+  #   core.find_one.reject {|k,v| v.nil?}
+  # end
 
   def update_with(properties)
     properties.each do |k,v|
@@ -91,5 +105,9 @@ class Profile
         self[k] = v
       end
     end
+  end
+
+  def changes
+    Changes.for(self)
   end
 end
