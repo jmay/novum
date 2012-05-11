@@ -17,6 +17,7 @@
 class Profile
   include Mongoid::Document
   has_many :commits, :dependent => :delete
+  has_many :properties, :dependent => :delete
 
   # attr_reader :id
 
@@ -50,7 +51,12 @@ class Profile
 
   after_create :record_creation
   def record_creation
-    Commit.create(:profile => self)
+    commit = Commit.create(:profile => self)
+    attributes.each do |k,v|
+      if k != '_id'
+        Property.create(:profile => self, :name => k, :value => v, :commit => commit.id)
+      end
+    end
   end
 
   around_update :record_update
@@ -58,8 +64,25 @@ class Profile
     yield
     if changes.any?
       # only record a commit if a property changed
-      Commit.create(:profile => self, :changes => changes)
+      commit = Commit.create(:profile => self, :changes => changes)
+      changes.each do |k,(vbefore,vafter)|
+        if prop = property(k)
+          prop.archive(commit)
+        end
+        Property.create(:profile => self, :name => k, :value => vafter, :commit => commit.id)
+      end
+      reload_relations
     end
+  end
+
+  def property(key)
+    current = properties.current.where(:name => key)
+    raise "multiple (#{current.count}) conflicting values for #{key}" if current.count > 1
+    current.first
+  end
+
+  def [](key)
+    property(key).andand.value
   end
 
   # after_destroy :clear_commits
@@ -130,7 +153,8 @@ class Profile
     end
   end
 
-  # def commits
-  #   Changes.for(self)
+  # # list of attribute names that have values; ignore internal things like the generated _id
+  # def properties
+  #   attributes.keys - ['_id']
   # end
 end

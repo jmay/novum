@@ -1,6 +1,7 @@
 class Commit
   include Mongoid::Document
   belongs_to :profile
+  has_many :properties
 
   # def self.mongo
   #   @@mongo ||= Mongo::Connection.new
