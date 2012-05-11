@@ -8,6 +8,9 @@ require 'rspec/autorun'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
+# blow away everything for each test run
+Mongoid::Config.master.connection.drop_database(Mongoid::Config.master.name)
+
 RSpec.configure do |config|
   # ## Mock Framework
   #
