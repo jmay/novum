@@ -43,7 +43,7 @@ describe "newly-created profile" do
   end
 
   it "should store properties separately, not in the main record" do
-    @ralph.attributes.keys.should == ['_id']
+    @ralph.attributes.keys.should == ['_id', '_creation_commit']
   end
 
   it "should have the initial properties" do
@@ -100,5 +100,23 @@ describe "profile with a null change" do
     @potsie.commits.count.should == 1
     @potsie.properties.count.should == 3
     @potsie.properties.current.count.should == 3
+  end
+end
+
+describe "profile with multi-valued properties" do
+  before(:all) do
+    @profile = Profile.create(:fullname => 'Jason May')
+    @profile[:email] = ['jason@example.com', 'jmay@elsewhere.org']
+    @profile.save
+  end
+
+  after(:all) do
+    @profile.delete
+  end
+
+  it "should have the values in a single property" do
+    @profile.commits.count.should == 2
+    @profile.properties.count.should == 2
+    @profile[:email].should == ['jason@example.com', 'jmay@elsewhere.org']
   end
 end

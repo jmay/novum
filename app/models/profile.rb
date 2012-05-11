@@ -61,6 +61,8 @@ class Profile
         Property.create(:profile => profile, :name => k, :value => v, :commit => commit.id)
       end
     end
+    profile[:_creation_commit] = commit.id
+    profile.save
     profile
   end
 
@@ -121,7 +123,11 @@ class Profile
   end
 
   def []=(key, value)
-    @incoming[key.to_s] = value
+    if key =~ /^_/
+      super
+    else
+      @incoming[key.to_s] = value
+    end
   end
 
   # after_destroy :clear_commits
