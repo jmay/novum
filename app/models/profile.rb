@@ -19,6 +19,8 @@ class Profile
   has_many :commits, :dependent => :delete
   has_many :properties, :dependent => :delete
 
+  attr_reader :incoming
+
   # attr_reader :id
 
   # def self.mongo
@@ -36,7 +38,8 @@ class Profile
   # end
 
   def self.[](handle)
-    first(:conditions => {"handle" => handle}) #.andand.to_hash
+    Property.current.where(:name => 'handle', :value => handle).first.andand.profile
+    # first(:conditions => {"handle" => handle}) #.andand.to_hash
     # # dbname = "novum:#{handle}"
     # # new(mongo[dbname])
     # profiles = db['profiles']
@@ -49,7 +52,23 @@ class Profile
   #   p
   # end
 
-  after_create :record_creation
+  def self.create(hash)
+    profile = super()
+    profile.setup
+    commit = Commit.create(:profile => profile)
+    hash.each do |k,v|
+      if k != '_id'
+        Property.create(:profile => profile, :name => k, :value => v, :commit => commit.id)
+      end
+    end
+    profile
+  end
+
+  def setup
+    @incoming = {}
+  end
+
+  # around_create :record_creation
   def record_creation
     commit = Commit.create(:profile => self)
     attributes.each do |k,v|
@@ -59,19 +78,35 @@ class Profile
     end
   end
 
-  around_update :record_update
+  # around_update :record_update
+  # def record_update
+  #   yield
+  #   pbefore = properties.current.
+  #   if changes.any?
+  #     puts "CHANGES: #{changes.inspect}"
+  #     # only record a commit if a property changed
+  #     commit = Commit.create(:profile => self, :changes => changes)
+  #     changes.each do |k,(vbefore,vafter)|
+  #       if prop = property(k)
+  #         prop.archive(commit)
+  #       end
+  #       Property.create(:profile => self, :name => k, :value => vafter, :commit => commit.id)
+  #     end
+  #     reload_relations
+  #   end
+  # end
+  after_update :record_update
   def record_update
-    yield
-    if changes.any?
-      # only record a commit if a property changed
-      commit = Commit.create(:profile => self, :changes => changes)
-      changes.each do |k,(vbefore,vafter)|
+    current = properties.current.each_with_object({}) {|prop,h| h[prop.name] = prop.value}
+    to_save = incoming.keep_if {|k,v| current[k] != v}
+    if to_save.any?
+      commit = Commit.create(:profile => self, :changes => to_save)
+      to_save.each do |k,v|
         if prop = property(k)
           prop.archive(commit)
         end
-        Property.create(:profile => self, :name => k, :value => vafter, :commit => commit.id)
+        Property.create(:profile => self, :name => k, :value => v, :commit => commit.id)
       end
-      reload_relations
     end
   end
 
@@ -83,6 +118,10 @@ class Profile
 
   def [](key)
     property(key).andand.value
+  end
+
+  def []=(key, value)
+    @incoming[key.to_s] = value
   end
 
   # after_destroy :clear_commits
