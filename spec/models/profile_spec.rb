@@ -34,7 +34,13 @@ describe "newly-created profile" do
   end
 
   it "should have minimal change log" do
-    @ralph.changes.count.should == 1
+    @ralph.commits.count.should == 1
+  end
+
+  it "should not record a commit for a null change" do
+    @ralph['fullname'] = 'Ralph Malph'
+    @ralph.save
+    @ralph.commits.count.should == 1
   end
 end
 
@@ -44,7 +50,9 @@ describe "profile changes" do
   end
 
   before(:each) do
-    @potsie.update(:fullname => 'Warren "Potsie" Weber')
+    # @potsie.update(:fullname => 'Warren "Potsie" Weber')
+    @potsie[:fullname] = 'Warren "Potsie" Weber'
+    @potsie.save
   end
 
   after(:all) do
@@ -57,6 +65,6 @@ describe "profile changes" do
 
   it "should remember history" do
     # puts @potsie.changes.to_a.inspect
-    @potsie.changes.count.should == 2
+    @potsie.commits.count.should == 2
   end
 end
