@@ -15,4 +15,11 @@ class Property
     self[:ts_end] = Time.now
     save
   end
+
+  # `pending` means that
+  # (a) this property is including the sync set for the specific authorization; and
+  # (b) there have been change to this property that have not yet been transmitted to the remote.
+  def pending?(auth)
+    false
+  end
 end

@@ -21,3 +21,25 @@
 # Features
 
 * "install" a profile onto a device from a different silo from others already on the device - e.g. if you want to allow a friend (temporarily or permanently) to use your device and access apps using data they have accumulated elsewhere
+
+## "Sharing"
+
+Scenarios:
+
+* sharing a contact group with spouse
+* sharing an entire calendar (in a multi-calendar environment) with co-worker
+* bi-directional sharing
+* revoking a share
+* adding additional attributes to a share
+
+## "Syncing"
+
+* keeping profile data consistent across multiple devices
+* keeping a small set of app-specific data (e.g. current level, high score, game settings) consistent across devices
+* sharing contacts between multiple profiles owned by same person (e.g. my personal and work contacts)
+
+## Profile Hierarchy
+
+* information in a subordinate profile (e.g. a child) is always visible/synced/shared to main profile (e.g. parent)
+* subordinate profile can have multiple masters
+* only master can 'release' the subordinate

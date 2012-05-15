@@ -18,8 +18,11 @@ class Profile
   include Mongoid::Document
   has_many :commits, :dependent => :delete
   has_many :properties, :dependent => :delete
+  has_many :authorizations, :dependent => :delete
 
   attr_reader :incoming
+
+  after_initialize :setup
 
   # attr_reader :id
 
@@ -202,4 +205,16 @@ class Profile
   # def properties
   #   attributes.keys - ['_id']
   # end
+
+  def share(opts)
+    auth = Authorization.create(opts.merge(:profile => self.id))
+  end
+
+  def root
+    '.'
+  end
+
+  def last_commit
+    commits.order_by([[:created_at, :desc]]).first
+  end
 end

@@ -3,6 +3,8 @@ class Commit
   belongs_to :profile
   has_many :properties
 
+  field :created_at, type: DateTime, default: -> { DateTime.now }
+
   # def self.mongo
   #   @@mongo ||= Mongo::Connection.new
   # end
