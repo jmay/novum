@@ -30,4 +30,16 @@ class Authorization
   def connect
     
   end
+
+  # is this property included in (to be synchronized for) this authorization?
+  def covers(property)
+    case root
+    when '*'
+      # include everything
+      true
+    else
+      false
+    end
+  end
+
 end

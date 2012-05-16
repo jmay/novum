@@ -24,6 +24,8 @@ class Profile
 
   after_initialize :setup
 
+  field :guid, type: String
+
   # attr_reader :id
 
   # def self.mongo
@@ -64,6 +66,7 @@ class Profile
         Property.create(:profile => profile, :name => k, :value => v, :commit => commit.id)
       end
     end
+    profile.guid = profile.id.to_s
     profile[:_creation_commit] = commit.id
     profile.save
     profile

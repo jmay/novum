@@ -35,6 +35,8 @@ group :development, :test do
   gem 'rb-fsevent'
   gem 'ruby_gntp'
   gem 'guard-rspec'
+
+  gem 'tconsole'
 end
 
 # To use ActiveModel has_secure_password

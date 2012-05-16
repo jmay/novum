@@ -3,6 +3,8 @@ require 'spec_helper'
 # pushing a new profile to a remote node
 # pushing updates to remote
 # sharing contacts with spouse
+# sharing a contact group
+# sharing a set of data based on some selector/query: when a record is moved out of that set (e.g. )
 
 describe "pushing to a remote node" do
   def create_profile
@@ -12,7 +14,7 @@ describe "pushing to a remote node" do
   before(:all) do
     @profile = create_profile
     @authzn = @profile.share(
-      :namespace => '.',
+      :namespace => '*',
       :remote => 'http://remote.example.com/',
       :title => "Placeholder",
       :allow => :all,

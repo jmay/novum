@@ -20,6 +20,14 @@ class Property
   # (a) this property is including the sync set for the specific authorization; and
   # (b) there have been change to this property that have not yet been transmitted to the remote.
   def pending?(auth)
-    false
+    a = auth.covers(self)
+    puts "COVERS? [#{a.inspect}]"
+    b = self.changed_since(auth)
+    puts "CHANGED? [#{b.inspect}]"
+    a && b
+  end
+
+  def changed_since(auth)
+    ts_start >= auth.created_at
   end
 end

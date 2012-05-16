@@ -61,7 +61,7 @@ end
 describe "profile changes" do
   before(:all) do
     @potsie = Profile.create(:handle => 'potsie', :fullname => 'Warren Weber', :email => 'potsie@happydays.com')
-    sleep 1
+    # sleep 1
     @potsie[:fullname] = 'Warren "Potsie" Weber'
     @potsie.save
   end
@@ -87,7 +87,7 @@ end
 describe "profile with a null change" do
   before(:all) do
     @potsie = Profile.create(:handle => 'potsie', :fullname => 'Warren Weber', :email => 'potsie@happydays.com')
-    sleep 1
+    # sleep 1
     @potsie[:fullname] = 'Warren Weber'
     @potsie.save
   end
