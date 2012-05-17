@@ -19,6 +19,7 @@ class Profile
   has_many :commits, :dependent => :delete
   has_many :properties, :dependent => :delete
   has_many :authorizations, :dependent => :delete
+  has_many :peers, :dependent => :delete
 
   attr_reader :incoming
 

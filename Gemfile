@@ -10,6 +10,7 @@ gem 'mongoid', '~> 2.4.9'
 gem 'mongo'
 gem 'bson_ext'
 
+gem 'faraday'
 gem 'andand'
 
 # Gems used only for assets and not required
@@ -35,6 +36,7 @@ group :development, :test do
   gem 'rb-fsevent'
   gem 'ruby_gntp'
   gem 'guard-rspec'
+  gem "mocha", :require => false
 
   gem 'tconsole'
 end

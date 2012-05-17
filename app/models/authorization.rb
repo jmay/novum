@@ -10,7 +10,8 @@ class Authorization
   belongs_to :profile
   belongs_to :commit
 
-  field :root, type: String, :default => '.'
+  field :namespace, type: String, :default => '.'
+  field :created_at, type: DateTime, default: -> { DateTime.now }
 
   # IDLE means the authorization has not yet connected to a remote
   def idle?
@@ -33,7 +34,7 @@ class Authorization
 
   # is this property included in (to be synchronized for) this authorization?
   def covers(property)
-    case root
+    case namespace
     when '*'
       # include everything
       true

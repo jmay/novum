@@ -45,6 +45,8 @@ GEM
     erubis (2.7.0)
     execjs (1.3.1)
       multi_json (~> 1.0)
+    faraday (0.8.0)
+      multipart-post (~> 1.1)
     ffi (1.0.11)
     guard (1.0.2)
       ffi (>= 0.5.0)
@@ -62,8 +64,11 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    metaclass (0.0.1)
     mime-types (1.18)
     minitest (2.11.4)
+    mocha (0.11.4)
+      metaclass (~> 0.0.1)
     mongo (1.6.2)
       bson (~> 1.6.2)
     mongoid (2.4.9)
@@ -71,6 +76,7 @@ GEM
       mongo (~> 1.3)
       tzinfo (~> 0.3.22)
     multi_json (1.3.4)
+    multipart-post (1.1.5)
     polyglot (0.3.3)
     rack (1.4.1)
     rack-cache (1.2)
@@ -142,8 +148,10 @@ DEPENDENCIES
   andand
   bson_ext
   coffee-rails (~> 3.2.1)
+  faraday
   guard-rspec
   jquery-rails
+  mocha
   mongo
   mongoid (~> 2.4.9)
   rack-test

@@ -1,14 +1,14 @@
 require 'test_helper'
 
-describe "empty database" do
-  it "should have no profiles" do
-    Profile.all.to_a.must_be_empty
-  end
+# describe "empty database" do
+#   it "should have no profiles" do
+#     Profile.all.to_a.must_be_empty
+#   end
 
-  it "should not find anything by name" do
-    Profile['ralphie'].must_be_nil
-  end
-end
+#   it "should not find anything by name" do
+#     Profile['ralphie'].must_be_nil
+#   end
+# end
 
 describe "newly-created profile" do
   before do
@@ -27,6 +27,10 @@ describe "newly-created profile" do
     # profiles.count.must_equal 1
     # p = Profile.first
     # p[:handle].must_equal 'ralphie'
+  end
+
+  it "should have no peers" do
+    @ralph.peers.must_be_empty
   end
 
   it "should be findable" do

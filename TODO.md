@@ -1,8 +1,8 @@
 # TODO
 
-* each profile should be a database, not a row in a collection
-* create new profile
-* renaming profiles? is that needed?
+* establishing connection between two novum servers, for data sync
+  * Peer object
+* master directory
 * collect all activity (reads as well as updates)
 * activity reporting
 * change history - audit trail
@@ -12,6 +12,15 @@
 * forking a silo or profile
 * moving a profile to a new silo
 * synchronizing data between profiles in different silos
+
+## postponed
+
+* each profile should be a database, not a row in a collection (under consideration: separate databases means mongo pre-allocates a big batch of memory; maybe this is an optimization for later)
+
+## nixed
+
+* renaming profiles? is that needed? (No, a profile doesn't have a name, it has properties/attributes which can change value.)
+
 
 # Questions
 
