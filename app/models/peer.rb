@@ -11,13 +11,13 @@ class Peer
     URI.parse(remote)
   end
 
-  def connect
+  def connect(payload)
     @connection = Faraday.new(:url => uri) do |builder|
       builder.request  :url_encoded
       builder.response :logger
       builder.adapter  :net_http
     end
-    response = connection.get '/sync/sync/sync'
+    response = connection.post '/sync/sync/sync', payload
   end
 
   def connected?

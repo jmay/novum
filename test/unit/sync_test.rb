@@ -45,11 +45,11 @@ describe "pushing to a remote node" do
   describe "once connected" do
     before do
       # mock a successful link to the remote
-      @authzn.connect
+      @profile.sync(@authzn)
     end
 
     it "should record state" do
-      @authzn.must_be :connected?
+      @authzn.must_be :active?
     end
 
     it "should make data current" do

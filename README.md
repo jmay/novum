@@ -34,12 +34,26 @@ These are "globals" for the profile.
 
 ## API
 
+* fetch core schema specification
+* create a profile (collection of core data about a user)
+* find a profile (based on an identifier like an email address)
+* fetch a profile (core data)
+* sync/update a profile (core data)
+* fetch app-specific data for a profile
+* sync/update app-specific data for a profile
+* authorize an application to read/write app-specific data for a profile
+* revoke a previous authorization
+* retrieve all authorizations for a profile
+* establish/break a relationship between two profiles
+* record event of releasing profile data to an application
+
 ### fetch namespace schema
 
     GET novum.dev/novum/schema
 
 Response should be a JSON Schema representation of the core schema, e.g.
 
+    schema-version-string
     com.novum:
       fullname: string
       handle: string
@@ -66,6 +80,7 @@ Response should be a JSON Schema representation of the core schema, e.g.
 Must provide an auth token as evidence. As a query parameter or HTTP header?
 
     {
+      "schema_version": "0.1",
       "com.novum": {
         "fullname": "Jason May",
         "handle": "Work",
@@ -113,6 +128,7 @@ This should return the main URL for the profile (creating a new profile if neces
     PUT novum.dev/profiles/74237482344
     (AUTHENTICATION/AUTHORIZATION)
     {
+      "schema_version": "0.1",
       "parent_commit": 123123123123,
       "com.novum": {
         "fullname": "Jason May",

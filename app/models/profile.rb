@@ -214,6 +214,10 @@ class Profile
     auth = Authorization.create(opts.merge(:profile => self.id))
   end
 
+  def sync(authzn)
+    authzn.sync
+  end
+
   def root
     '.'
   end

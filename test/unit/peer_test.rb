@@ -24,8 +24,8 @@ describe Peer do
   describe "after initial connection" do
     before do
       Faraday.expects(:new).returns(mock_connection = mock)
-      mock_connection.expects(:get).returns(true)
-      @connection ||= @peer.connect
+      mock_connection.expects(:post).returns(true)
+      @connection ||= @peer.connect({:data => 123})
     end
 
     it "should have state" do
